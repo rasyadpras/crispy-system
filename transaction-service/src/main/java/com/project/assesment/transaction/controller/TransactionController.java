@@ -21,7 +21,7 @@ public class TransactionController {
         Response<String> response = new Response<>();
         response.setStatus(HttpStatus.CREATED.value());
         response.setMessage(HttpStatus.CREATED.getReasonPhrase());
-        response.setData("Product created");
+        response.setData("Transaction created");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

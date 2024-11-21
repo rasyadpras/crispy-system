@@ -4,12 +4,20 @@ services:
     image: postgres:15
     container_name: postgres-db
     environment:
-      POSTGRES_USER: yourusername
-      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./create-db.sql:/docker-entrypoint-initdb.d/1_create-db.sql
+      - ./user-service/create-table.sql:/docker-entrypoint-initdb.d/2_user-create-table.sql
+      - ./product-service/create-table.sql:/docker-entrypoint-initdb.d/3_product-create-table.sql
+      - ./transaction-service/create-table.sql:/docker-entrypoint-initdb.d/4_transaction-create-table.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
 
   user-service:
     build:
@@ -18,12 +26,13 @@ services:
     ports:
       - "8081:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yourdbname
-      SPRING_DATASOURCE_USERNAME: yourusername
-      SPRING_DATASOURCE_PASSWORD: yourpassword
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ad_user
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   transaction-service:
     build:
@@ -32,12 +41,13 @@ services:
     ports:
       - "8082:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yourdbname
-      SPRING_DATASOURCE_USERNAME: yourusername
-      SPRING_DATASOURCE_PASSWORD: yourpassword
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ad_transaction
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   product-service:
     build:
@@ -46,12 +56,13 @@ services:
     ports:
       - "8083:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yourdbname
-      SPRING_DATASOURCE_USERNAME: yourusername
-      SPRING_DATASOURCE_PASSWORD: yourpassword
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ad_product
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:

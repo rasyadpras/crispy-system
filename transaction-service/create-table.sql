@@ -1,3 +1,5 @@
+\c ad_transaction;
+
 CREATE TABLE transactions (
     id SERIAL PRIMARY KEY,
     transaction_date DATE NOT NULL,
