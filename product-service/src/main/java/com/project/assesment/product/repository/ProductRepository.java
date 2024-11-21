@@ -1,7 +1,6 @@
 package com.project.assesment.product.repository;
 
 import com.project.assesment.product.entity.Product;
-import com.project.assesment.product.model.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +16,7 @@ public class ProductRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public void create(Product product) {
-        String query = "INSERT INTO products (product, price, stock) VALUES (?, ?)";
+        String query = "INSERT INTO products (product, price, stock) VALUES (?, ?, ?)";
         jdbcTemplate.update(query, product.getProduct(), product.getPrice(), product.getStock());
     }
 

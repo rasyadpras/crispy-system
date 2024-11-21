@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/transaction")
+@RequestMapping("/api/v1/transactions")
 @RequiredArgsConstructor
 public class TransactionController {
     private final TransactionService transactionService;
@@ -26,7 +26,7 @@ public class TransactionController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Response<TransactionResponse>> findById(@PathVariable String id) {
+    public ResponseEntity<Response<TransactionResponse>> findById(@PathVariable Integer id) {
         TransactionResponse transactionResponse = transactionService.findById(id);
         Response<TransactionResponse> response = new Response<>();
         response.setStatus(HttpStatus.OK.value());

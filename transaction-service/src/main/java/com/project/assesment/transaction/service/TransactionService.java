@@ -36,19 +36,19 @@ public class TransactionService {
         Transaction transaction = new Transaction();
         transaction.setTransactionDate(convertToLocalDate(transactionRequest.getTransactionDate()));
         transaction.setCustomerId(transactionRequest.getCustomerId());
-        transactionRepository.create(transaction);
+        Integer transactionId = transactionRepository.create(transaction);
 
         transactionRequest.getTransactionDetails().stream()
                 .map(detailReq -> {
                     TransactionDetail transactionDetail = new TransactionDetail();
-                    transactionDetail.setTransactionId(transaction.getId());
+                    transactionDetail.setTransactionId(transactionId);
                     transactionDetail.setProductId(detailReq.getProductId());
                     transactionDetail.setQuantity(detailReq.getQuantity());
                     return transactionDetail;
                 }).forEach(transactionDetailRepository::create);
     }
 
-    public TransactionResponse findById(String id) {
+    public TransactionResponse findById(Integer id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found")
         );
@@ -56,7 +56,6 @@ public class TransactionService {
         response.setId(transaction.getId());
         response.setCustomerId(transaction.getCustomerId());
         response.setTransactionDate(transaction.getTransactionDate());
-        response.setTotalPrice(transaction.getTotalPrice());
 
         List<TransactionDetail> transactionDetails = transactionDetailRepository.findByTransactionId(transaction.getId());
         List<TransactionDetailResponse> detailResponses = transactionDetails.stream().map(detail -> {

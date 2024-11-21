@@ -11,5 +11,4 @@ public class Transaction {
     private LocalDate transactionDate;
     private Integer customerId;
     private List<TransactionDetail> transactionDetails;
-    private Long totalPrice;
 }
