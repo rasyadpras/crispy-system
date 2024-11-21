@@ -3,9 +3,8 @@ package com.project.assesment.transaction.model;
 import lombok.Data;
 
 @Data
-public class TransactionDetailResponse {
+public class ProductResponse {
     private Integer id;
-    private String product;
+    private String name;
     private Long price;
-    private Integer quantity;
 }

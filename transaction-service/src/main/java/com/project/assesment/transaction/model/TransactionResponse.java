@@ -9,7 +9,7 @@ import java.util.List;
 public class TransactionResponse {
     private Integer id;
     private LocalDate transactionDate;
-    private Integer customerId;
+    private String customer;
     private List<TransactionDetailResponse> transactionDetails;
     private Long totalPrice;
 }
